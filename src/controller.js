@@ -12,6 +12,14 @@ const upload = async (req, res) => {
         return res.status(400).json({ error: 'No se subió ningún archivo.' });
     }
 
+    const allowedExtensions = ['.xls', '.xlsx'];
+    const path = require('path');
+    const fileExtension = path.extname(file.originalname).toLowerCase();
+
+    if (!allowedExtensions.includes(fileExtension)) {
+        return res.status(400).json({ error: 'El archivo debe ser un documento Excel (.xls o .xlsx).' });
+    }
+
     const filePath = path.join(__dirname, '..', '_temp', file.filename);
 
     const rl = readline.createInterface({
